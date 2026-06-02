@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  db:
+    image: mariadb:10.6
+    container_name: orangehrm-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: orangehrm
+      MYSQL_USER: orangehrm
+      MYSQL_PASSWORD: orangehrm
+    ports:
+      - "3306:3306"
+
+  orangehrm:
+    image: orangehrm/orangehrm
+    container_name: orangehrm-app
+    depends_on:
+      - db
+    ports:
+      - "8081:80"
+    environment:
+      ORANGEHRM_DATABASE_HOST: db
+      ORANGEHRM_DATABASE_USER: orangehrm
+      ORANGEHRM_DATABASE_PASSWORD: orangehrm
+      ORANGEHRM_DATABASE_NAME: orangehrm
