@@ -2,17 +2,11 @@ import { test } from '../../fixtures/fixture'
 import { faker } from '@faker-js/faker';
 import { PageName } from '../../pages/emum/PageName';
 import { TabName } from '../../pages/emum/TabName';
+import { generateData } from '../../pages/components/ramdom-data';
 
 test.describe('Employees Management', () => {
-    const employeeData = () => ({
-        firstName: faker.person.firstName(),
-        lastName: faker.person.lastName(),
-        id: faker.string.numeric(5),
-        username: faker.internet.username(),
-        password: faker.internet.password({ pattern: /[A-Z0-9a-z\W]/ }) + 1
-    });
     test('should add an employee without credentials', async ({ dashboardPage, pimPage }) => {
-        const data = employeeData()
+        const data = generateData()
         await dashboardPage.expectDashboardVisible();
         await pimPage.switchPage(PageName.PIM)
         await pimPage.switchTab(TabName.AddEmployee)
@@ -46,7 +40,7 @@ test.describe('Employees Management', () => {
         const statusList = ['Enabled', 'Disabled'];
         for (const status of statusList) {
             test(`Create ${status} Login Details`, async ({ dashboardPage, pimPage, loginPage }) => {
-                const data = employeeData()
+                const data = generateData()
                 const fullName = `${data.firstName} ${data.lastName}`
                 await dashboardPage.expectDashboardVisible();
                 await pimPage.switchPage(PageName.PIM)

@@ -1,38 +1,32 @@
-import { faker } from "@faker-js/faker"
+import { da, faker } from "@faker-js/faker"
 import { test } from "../../fixtures/fixture";
 import { RecruitmentPage } from "../../pages/RecruitmentPage";
 import { PageName } from "../../pages/emum/PageName";
 import { TabName } from "../../pages/emum/TabName";
+import { generateData} from "../../pages/components/ramdom-data"
 
 async function createCandidate(recruitmentPage: RecruitmentPage) {
-    const firstName = faker.person.firstName();
-    const lastName = faker.person.lastName();
-    const email = faker.internet.email();
-    const phone = faker.phone.imei();
-    const keyword = faker.lorem.sentence();
-    const note = faker.lorem.sentence();
-
-    await recruitmentPage.fillFirstName(firstName);
-    await recruitmentPage.fillLastName(lastName);
-    await recruitmentPage.fillInput('Email', email);
-    await recruitmentPage.fillInput('Contact Number', phone);
+    const data = generateData();
+    await recruitmentPage.fillFirstName(data.firstName);
+    await recruitmentPage.fillLastName(data.lastName);
+    await recruitmentPage.fillInput('Email', data.email);
+    await recruitmentPage.fillInput('Contact Number', data.phone);
     const vacancy = await recruitmentPage.selectRandomElement('Vacancy');
     const dateValue = await recruitmentPage.selectDate('Date of Application', { month: 'January', year: '1990', day: '15' });
-
-    await recruitmentPage.fillInput('Keywords', keyword);
-    await recruitmentPage.fillInput('Notes', note);
+    await recruitmentPage.fillInput('Keywords', data.keyword);
+    await recruitmentPage.fillInput('Notes', data.keyword);
     await recruitmentPage.clickBtn('Save');
 
     return {
-        firstName,
-        lastName,
-        fullName: `${firstName} ${lastName}`,
-        email,
-        phone,
-        vacancy,
-        dateValue,
-        keyword,
-        note
+     firstName: data.firstName,
+        lastName: data.lastName,
+        fullName: `${data.firstName} ${data.lastName}`,
+        email: data.email,
+        phone: data.phone,
+        vacancy,      
+        dateValue,    
+        keyword: data.keyword,
+        note: data.note
     }
 }
 test.describe('Candidate flow', () => {
